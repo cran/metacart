@@ -1,0 +1,96 @@
+---
+title: "Identify interaction effects between multiple moderators in R by metacart package"
+author: "Xinru Li and Elise Dusseldorp"
+date: "`r Sys.Date()`"
+output: pdf_document
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+This is an introduction to show how to use the r-package \{metacart\} for interaction detection in meta-analysis. Meta-CART analyses will be performed on two example datasets, including one simulated data set and one real-world data sets.
+
+The simulated data example
+---
+First, we start with a simulated data set generated from a true model with a three-way interaction between three moderators. The decription of the simulated data can be found in the help file by typing "?SimData" or "help(SimData)". 
+```{r load}
+library(metacart)
+?SimData
+summary(SimData)
+set.seed(1)
+```
+
+
+To perform a meta-CART analysis, there are two model assumptions to choose from: the fixed-effect model and the random-effects model. To perform a RE meta-CART analysis, we need to use the function REmrt() and specify the effect size variable, the moderators, the sampling variance variable, the data set, and the pruning parameter. The argument "formula = " can be used to specify the effect size and the moderators. In this case, the effect size vector is called "efk" in the data set, and the interested moderators are "m1", "m2", "m3", "m4" and "m5". Therefore, we can use "formula = efk ~ m1 + m2 + m3 + m4 + m5" to specify the outcome variable (i.e., effect size) and the moderators. The argument "vi = " can be used to specify the sampling variance parameter, and we use "vi = vark" here because our sampling variance is called "vark". The argument "data = SimData" is used to specify that we are going to analysis the data set called "SimData". The pruning parameter "c = " is a tuning parameter that ranges from 0 to 1. It influences the pruning process of meta-CART. The larger the pruning parameter is, the more pruning meta-CART will have, and the more conservative the analysis will be (i.e. more control of Type I error and sacrifice some power). In Li et al. (2017), it is recommend to use c = 1 for RE meta-CART if the number of studies is smaller than 120 (to control Type I error below 0.05). Thus, we use pruning rule: c = 0.5 here.
+
+```{r sim}
+res.simRE <- REmrt(formula = efk ~ m1 + m2 + m3 + m4 +m5, data = SimData, vi = vark, c = 0.5)
+res.simRE
+```
+The analysis results indicate that a tree with three moderators was detected. And we can use the function plot() to see the interaction effects between the moderators by the parsimonious tree model. The tree model indicates that the effect size is highest when the moderator "m3" is not A or C, and moderators "m1" and "m2" are not A. This is the same as our true model. By using the function summary(), a standard subgroup analysis is performed and the between-subgroups $Q$-statistic indicates that the moderator effects are significant (Qb = 415.257, p-value $<0.0001$). The estimates of effect size in each subgroup and the confidence intervals are also give. 
+```{r sim2}
+plot(res.simRE)
+summary(res.simRE)
+
+```
+
+To perform a FE meta-CART analysis, we need to use the function FEmrt(). The arguments of FEmrt() is similar to REmrt(), with "formula = " specifying the effect size variable and the moderators, "vi = " specifying the sampling variance variable, "data = " specifying the data set to be analyzed, and "c = " specifying the pruning parameter. In Li et al. (2017), it is recommend to use c = 1 for FE meta-CART if the number of studies is smaller than 80, and c = 0.5 if there number of studies is equal or larger than 80. So we use $c= 0.5$ in this case.
+
+```{r FEsim}
+res.simFE <- FEmrt(formula = efk ~ m1 + m2 + m3 + m4 +m5, data = SimData, vi = vark, c = 0.5)
+res.simFE
+plot(res.simFE)
+summary(res.simFE)
+
+```
+
+The same as the RE meta-CART analysis, the true model is recovered with a three-way interaction between m1, m2, and m3. Note that the between-subgroup Qb is larger and the CIs are more narrow under the FE assumption comparing to the the RE assumption. This is because that FE assumption ignores the uncertainty introduced by the residual heterogeneity.
+
+
+
+The real-world data example
+---
+In this example, we will analyze the health psychology data by Michie et al. (2009). The detailed of this data set can be find by type in r: ?dat.BCT2009 or help(dat.BCT2009). The data set consists of 106 interventions and five moderators (motivation-enhancing BCTs). We will investigate the interaction effects between these moderators, and identify the effective combination(s) of BCTs. 
+```{r library}
+data("dat.BCT2009")
+summary(dat.BCT2009)
+```
+
+By inspecting the data, we noticed that BCT3 "Provide information about other's approval" was not used in any interventions. Thus, this moderator will not be included in the meta-CART analysis. 
+
+To perform a RE meta-CART analysis, we use "formula = g ~ T1 + T2 + T4 + T5" to specify the outcome variable (i.e., effect size) and the moderators. The argument "vi = vi " was used to specify the sampling variance parameter. The argument "data = dat.BCT2009" was used to specify the data set. We start with the conservative pruning rule $c=1$.
+```{r RE1}
+set.seed(2017)
+REres1 <- REmrt(formula = g ~ T1 + T2 + T4 + T25, vi = vi, data = dat.BCT2009, c = 1)
+
+```
+
+We received a warning message that "no moderator effect was detected". That means that RE meta-CART did not detect any moderator in this case. We can still get the RE meta-analysis results by using the function summary(). The $Q$ = 253.0357 (df = 105, $p$-value < 1e-04) indicates that there is significant heterogeneity between the interventions. And the estimate for the overall effect size and the confidence interval (CI) under the RE assumption are also given.
+
+```{r summary}
+summary(REres1)
+```
+
+If we want to perform a more liberal meta-CART analysis and risk higher Type I error, we can perform the analysis using the pruning parameter c = 0. This time RE meta-CART detected two moderators T1 and T4, and a tree with three terminal nodes was identified. 
+```{r RE2}
+REres0 <- REmrt(formula = g ~ T1 + T2 + T4 + T25, vi = vi, data = dat.BCT2009, c = 0)
+REres0
+summary(REres0)
+plot(REres0)
+
+```
+We can obtain the subgroup analysis results by using the function summary. The between-subgroups Qb = 13.208 (df = 2, p-value 0.0013552) indicated that there is significant difference in the effect sizes between the three identified subgroups, and the moderator effects are significant. The estimates for the summary effect sizes and CIs for each subgroup are given as well. 
+```{r sumRE2}
+summary(REres1)
+```
+
+Then we use FEmrt() to perform a FE meta-CART analysis. The number of studies is larger than 80, so we use c = 0.5. The FE meta-CART also detected an interaction effect between BCT1 and BCT4. When the two BCTs are both included, the effect size will be higher. By using the summary() function, we can obtain the heterogeneity test, and the estimates for effect sizes and CIs for each subgroup under the FE model assumption.
+
+```{r FE}
+FEres <- FEmrt(formula = g ~ T1 + T2 + T4 + T25, vi = vi, data = dat.BCT2009, c = 0.5)
+FEres
+summary(FEres)
+plot(FEres)
+```
+
+
