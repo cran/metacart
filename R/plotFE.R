@@ -1,17 +1,47 @@
-#' Visualisation of a RE meta-tree
+#' Visualisation of a FE meta-tree
 #'
-#' Plot function for a \code{REmrt} object. The plot shows the result of \code{REmrt}.
+#' Plot function for a \code{FEmrt} object. The plot shows the result of \code{FEmrt}.
 #' The plot function uses the plot method from the package \pkg{ggplot2}
 #'
-#' For categorical variables we recommend to use short names for levels to avoid overlapping labels at split points.
-#' @method plot REmrt
-#' @param x A REmrt object.
-#' @param ... Additional arguments to pass.
+#' For categorical variables we recommend to use short names for levels to avoid overlapping
+#' labels at split points.
+#' @method plot FEmrt
+#' @param x A FEmrt object.
+#' @param ... additional arguments to pass
 #' @import ggplot2
 #' @import gridExtra
 #' @export
-plot.REmrt <- function(x, ...){
-  if (length(x$n) < 2) {stop("no tree was detected")}
+plot.FEmrt <- function(x, ...){
+  # Extract necessary information from the FEmrt object
+
+  frame <- x$tree$frame
+  # re-label the nodes to eliminate the gap of numbers
+  frame0 <- frame
+  rownames(frame0) <- rank(as.numeric(rownames(frame)))
+  # a vector to translate rpart node labels to our own labels
+  trans.labels <- rownames(frame)
+  names(trans.labels) <- rownames(frame0)
+
+  # subgrouping the studies by the final tree
+  term.nodes <- rownames(frame0)[x$tree$where]
+  # find the parent leaves and the order of split
+  inx.pleaves <- which(frame0$var != "<leaf>")
+  pleaves <- rownames(frame0)[inx.pleaves]
+  # order the splits by the first child leaf of the parent leaves
+  pleaves <- pleaves[order(as.numeric(rownames(frame0)[inx.pleaves+1]))]
+  splits.all <- labels(x$tree, minlength = 0L)
+  splits <- splits.all[inx.pleaves+1][order(as.numeric(rownames(frame0)[inx.pleaves+1]))]
+  ntree <- data.frame(split = as.character(splits), pleaf = as.numeric(pleaves))
+  # create an ojbect with all plotting information
+  object <- list()
+  object$data <- x$data
+  object$data$term.node <- term.nodes
+  object$tree <- ntree
+  object$n <- table(term.nodes)
+  object$tree$split <- as.character(object$tree$split)
+
+  # plot
+  if (length(object$n) < 2) {stop("no tree was detected")}
   else {
     # transparent theme of ggplot2
     transparent_theme <- ggplot2::theme(
@@ -43,11 +73,12 @@ plot.REmrt <- function(x, ...){
       plot.background = element_blank()
     )
 
+
     y <- NULL
     term.node <- NULL
     yi <- NULL
     leaf.no <- NULL
-    tree <- x$tree
+    tree <- object$tree
     tree <- tree[!is.na(tree$pleaf), ]
     # first, grow the tree from the root node with order and
     # find out the order of terminal nodes
@@ -86,7 +117,7 @@ plot.REmrt <- function(x, ...){
     }
     # Add split conditions
     nodes$split = NA
-    nodes$split[tree$pleaf] = as.character(tree$split)
+    nodes$split[tree$pleaf] = tree$split
 
     # Second, find the new x.coordinates
     nodes$x.new <- rep(NA, nrow(nodes))
@@ -94,7 +125,7 @@ plot.REmrt <- function(x, ...){
     inx.term <- !(nodes$leaf %in% nodes$pleaf)
     nodes.term <- nodes[inx.term,]
     nodes$x.new[inx.term] <- rank(nodes$x[inx.term])
-    nodes$leaf.no[inx.term] <- x$n[as.character(nodes$leaf[inx.term])]
+    nodes$leaf.no[inx.term] <- object$n[as.character(nodes$leaf[inx.term])]
     # fix the x.coord for parent nodes
     for (i in min(nodes$y):-1){
       inx.pleaf <- which(nodes$y == i)
@@ -119,7 +150,6 @@ plot.REmrt <- function(x, ...){
 
     # Build the plot
     vis <- ggplot()
-
     # Add lines first
     for(i in 1:nrow(nodes)){
       node <- nodes[i, ]
@@ -200,8 +230,6 @@ plot.REmrt <- function(x, ...){
 
     vis <- vis + transparent_theme
 
-
-
     # plot the confident intervals
     term <- nodes[is.na(nodes$split),]
     # with ascending x
@@ -219,21 +247,13 @@ plot.REmrt <- function(x, ...){
     p <- p + scale_x_discrete(limits = as.factor(term$leaf))
     # # can be adjusted in future
     CI.ratio = 2
-    for (i in unique(x$data$term.node)) {
-      i <- as.character(i)
-      y.coord2 = x$g[i]
+    for (i in unique(term.nodes)) {
+      y.coord2 = frame0[i, ]$yval
       x.coord2 = nodes[i, ]$x
       # node names need to be changed for x$se
-      p <- CI_draw(p, x = x.coord2, y = y.coord2, b = 1.96* x$se[i], a = 1.96* x$se[i]/CI.ratio)
+      p <- CI_draw(p, x = x.coord2, y = y.coord2, b = 1.96* x$se[trans.labels[i]], a = 1.96* x$se[trans.labels[i]]/CI.ratio)
 
     }
-
-
-    # for (i in unique(term.nodes)) {
-    #   b = 1.96* x$se[i]
-    #   a = b/CI.ratio
-    #   p <- CI_draw(p, x = nodes[i, ]$x , y = frame0[i,]$yval, a = a, b = b)
-    # }
     p <- p + transparent_theme2
     # Finally put two plots together
     # X:    ggplotGrob + annotation_custom
@@ -243,5 +263,9 @@ plot.REmrt <- function(x, ...){
 
     grid.arrange(vis, p, nrow = 2, as.table=T, heights = c(3,1))
 
+
   }
+
+
 }
+

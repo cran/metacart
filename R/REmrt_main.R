@@ -9,22 +9,12 @@
 #' @param c A non-negative scalar.The pruning parameter to prune the initial tree by the "c*standard-error" rule.
 #' @param maxL the maximum number of splits
 #' @param minsplit the minimum number of studies in a parent node before splitting
-#' @param delQ the stopping rule for the decrease of between-subgroups Q. Any split that does not decrease the between-subgroups Q is not attempted.
-#' @param n.fold the number of folds to perform the cross-validation
+#' @param cp the stopping rule for the decrease of between-subgroups Q. Any split that does not decrease the between-subgroups Q is not attempted.
+#' @param xval the number of folds to perform the cross-validation
+#' @param minbucket the minimum number of the studies in a terminal node
+#' @param lookahead an argument indicating whether to apply the "look-ahead" strategy when fitting the tree
 #' @param ... Additional arguments to be passed.
-#' @return If no moderator effect is detected, the function will return a list including the following objects:
-#' @return n: The total number of the studies
-#' @return Q: The Q-statistics for the heterogeneity test
-#' @return df: The degree of freedoms of the heterogeneity test
-#' @return pval.Q: The p-value for the heterogeneity test
-#' @return g: The summary effect size for all studies (i.e., the overall effect size)
-#' @return se: The standard error of the summary effect size
-#' @return zval: The test statistic of the summary effect size
-#' @return pval: The p-value for the test statistic of the summary effect size
-#' @return ci.lb: The lower bound of the confidence interval for the summary effect size
-#' @return ci.ub: The upper bound of the confidence interval for the summary effect size
-#' @return call: The matched call
-#' @return If  (a) moderator effect(s) is(are) detected, the function will return a list including the following objects:
+#' @return \strong{If (a) moderator effect(s) is(are) detected, the function will return a list including the following objects:}
 #' @return tree: A data frame that represents the tree, with the Q-between and the residual heterogeneity (tau^2) after each split.
 #' @return n: The number of the studies in each subgroup
 #' @return moderators: the names of identified moderators
@@ -41,29 +31,50 @@
 #' @return call: The matched call
 #' @return cv.res: The cross-validation table
 #' @return data: the data set subgrouped by the fitted tree
-#' @importFrom stats terms model.response
-#'@examples data(dat.BCT2009)
+#' @return \strong{If no moderator effect is detected, the function will return a list including the following objects:}
+#' @return n: The total number of the studies
+#' @return Q: The Q-statistics for the heterogeneity test
+#' @return df: The degree of freedoms of the heterogeneity test
+#' @return pval.Q: The p-value for the heterogeneity test
+#' @return g: The summary effect size for all studies (i.e., the overall effect size)
+#' @return se: The standard error of the summary effect size
+#' @return zval: The test statistic of the summary effect size
+#' @return pval: The p-value for the test statistic of the summary effect size
+#' @return ci.lb: The lower bound of the confidence interval for the summary effect size
+#' @return ci.ub: The upper bound of the confidence interval for the summary effect size
+#' @return call: The matched call
+#' @examples data(dat.BCT2009)
 #' REtree <- REmrt(g ~ T1 + T2+ T4 +T25, vi = vi, data = dat.BCT2009, c = 0)
 #' summary(REtree)
+#' plot(REtree)
+#' @importFrom stats terms model.response pchisq pnorm qnorm
 #' @seealso \code{\link{summary.REmrt}}, \code{\link{plot.REmrt}}
 #' @export
 
-REmrt <- function(formula, data, vi, c = 1, maxL = 10L, minsplit = 2L, delQ = 0.001, n.fold = 10, ...){
+REmrt <- function(formula, data, vi, c = 1, maxL = 5, minsplit = 6, cp = 1e-5, minbucket = 3, xval = 10, lookahead = FALSE, ...){
   Call <- match.call()
   indx <- match(c("formula", "data", "vi"),
                 names(Call), nomatch = 0L)
+#------  Check if all arguments are correctly specified  -------#  
   if (indx[1] == 0L)
     stop("a 'formula' argument is required")
   if (indx[3] == 0L)
     stop("The sampling variances need to be specified")
+  if (!is.logical(lookahead))
+    stop("The 'lookahead' argument needs to be a logical value")
+  if (maxL < 2 & (lookahead == TRUE) )
+    stop("The 'maxL' should be at least 2 when applying look-ahead strategy")
   temp <- Call[c(1L, indx)]
   temp[[1L]] <- quote(stats::model.frame)
   mf <- eval.parent(temp)
-  cv.res <- REmrt.xvalid(mf, maxL = maxL, n.fold = n.fold)
+  
+#---    use x-validation to decide the size of the tree    ---#
+  cv.res <- Xvalid_all(REmrt_GS_, mf, maxL = maxL, n.fold = xval, minbucket = minbucket, minsplit = minsplit, cp = cp, lookahead = lookahead)
   mindex <- which.min(cv.res[, 1])
   cp.minse <- cv.res[mindex,1] + c*cv.res[mindex,2]
   cp.row <- min(which(cv.res[,1]<= cp.minse))
-  if (cp.row == 1) {
+  
+  if (cp.row == 1) {  # if no tree was detected
     warning("no moderator effect was detected")
     y <- model.response(mf)
     vi <- c(t(mf["(vi)"]))
@@ -83,37 +94,37 @@ REmrt <- function(formula, data, vi, c = 1, maxL = 10L, minsplit = 2L, delQ = 0.
     pval <- pnorm(abs(zval), lower.tail=FALSE)*2
     ci.lb <- g - qnorm(0.975)*se
     ci.ub <- g + qnorm(0.975)*se
-
-    res <- list(n = n ,  Q = Q,
+    res <- REmrt_GS_(mf, maxL = maxL, minsplit = minsplit, cp = cp, minbucket = minbucket, lookahead = lookahead)
+    res.f <- list(n = n ,  Q = Q,
                 df = df, pval.Q = pval.Q, tau2 = tau2, g = g, se = se, zval = zval,
-                pval = pval, ci.lb = ci.lb, ci.ub = ci.ub, call = Call, data = mf, cv.res = cv.res)
-    res.f <- res
-  } else{
+                pval = pval, ci.lb = ci.lb, ci.ub = ci.ub, call = Call, data = mf, cv.res = cv.res, initial.tree = res$tree)
+  } else{  
     y <- model.response(mf)
     vi <- c(t(mf["(vi)"]))
-    res <- REmrt.fit1(mf, maxL = cp.row - 1, minsplit = minsplit, delQ = delQ)
-    depth <- nrow(res$tree)
-    tau2 <- res$tree$tau2[depth]
+    res <- REmrt_GS_(mf, maxL = maxL, minsplit = minsplit, cp = cp, minbucket = minbucket, lookahead = lookahead)
+    prunedTree <- res$tree[1:cp.row, ]
+    tau2 <- res$tree$tau2[cp.row]
     vi.star <- vi + tau2
-    subnodes <- c(t(res$node.split[ncol(res$node.split)]))
+    subnodes <- res$node.split[[cp.row]]
     wy.star <- y/vi.star
     n <- tapply(y, subnodes, length)
     g <- tapply(wy.star, subnodes, sum)/tapply(1/vi.star, subnodes, sum)
-    df <- depth - 1
-    Qb <- res$tree$Qb[depth]
+    df <- cp.row - 1
+    Qb <- res$tree$Qb[cp.row]
     pval.Qb <- pchisq(Qb, df, lower.tail = FALSE)
     se <- tapply(vi.star, subnodes, function(x) sqrt(1/sum(1/x)))
     zval <- g/se
     pval <- pnorm(abs(zval),lower.tail=FALSE)*2
     ci.lb <- g - qnorm(0.975)*se
     ci.ub <- g + qnorm(0.975)*se
-    mod.names <- unique(res$tree$mod[!is.na(res$tree$mod)])
+    mod.names <- unique(prunedTree$mod[!is.na(prunedTree$mod)])
     mf$term.node <- subnodes
-    res.f<- list(tree =  res$tree, n = n, moderators =  mod.names, Qb = Qb, tau2 = tau2, df = df, pval.Qb = pval.Qb,
-         g = g, se = se, zval =zval, pval = pval, ci.lb = ci.lb,
-         ci.ub = ci.ub, call = Call, cv.res = cv.res, data = mf, cpt = res$cpt)
-   }
- class(res.f) <- "REmrt"
- res.f
-
+    res.f<- list(tree =  prunedTree, n = n, moderators =  mod.names, Qb = Qb, tau2 = tau2, df = df, pval.Qb = pval.Qb,
+                 g = g, se = se, zval =zval, pval = pval, ci.lb = ci.lb,
+                 ci.ub = ci.ub, call = Call, cv.res = cv.res, cpt = res$cpt,
+                 data = mf, initial.tree = res$tree)
+  }
+  class(res.f) <- "REmrt"
+  res.f
+  
 }

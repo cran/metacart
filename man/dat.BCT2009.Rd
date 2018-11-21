@@ -33,10 +33,10 @@ data(dat.BCT2009)
 \description{
 The complete data consist of 101 studies reporting 122 interventions targeted at physical activity and healthy eating.
 In this subset of the data, the interventions that include at least one
-of the motivation-enhancing BCTs were selected (N = 106).
+of the motivation-enhancing behaviour change techniques (BCTs) were selected (N = 106).
 }
 \details{
-IMPORANT: for questions about these data contact Xinru Li: x.li@math.leidenuniv.nl.
+IMPORTANT: for questions about these data contact Xinru Li: x.li@math.leidenuniv.nl.
 }
 \references{
 If you use these data, please refer to: Michie, S., Abraham, C., Whittington, C., McAteer, J., & Gupta, S. (2009). Effective techniques in healthy eating and physical activity interventions: a meta-regression. \emph{Health Psychology, 28(6)}, 690.

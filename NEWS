@@ -1,0 +1,7 @@
+Changes in metacart Version 2.0-0 (2018-11-21)
+========================================
+* New plot.FEmrt() function that produces the same plots as plot.REmrt().
+* New REmrt() function that implements the update scheme to boost the speed. Also, internal Rcpp functions .compute_tau_() and .compute_re_Q_() were created to speed up the computation of residual heterogeneity and Q-statistic for each split point.
+* Xvalid_all() is renewed with faster speed. Internal Rcpp functions .partition(), .ComputeY(), .PredY(), .ReplaceNA() were added.
+* quint.validate() is renewed.
+* New example data set dat.balanced is added.

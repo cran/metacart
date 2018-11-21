@@ -17,8 +17,3 @@ Print the results of a FEmrt object
 \details{
 The function returns the objects concerning the analysis results.
 }
-\examples{
-data(SimData)
-test <- FEmrt(efk~m1+m2+m3+m4+m5, vark, data=SimData, c=1)
-print(test)
-}

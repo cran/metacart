@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.R
 \name{summary.FEmrt}
 \alias{summary.FEmrt}
-\title{Summary function for metacart}
+\title{Summary of the results of a FE meta-tree object}
 \usage{
 \method{summary}{FEmrt}(object, digits = 3, ...)
 }
@@ -20,6 +20,6 @@ Summary of the results of a FE meta-tree object
 If no moderator effect is detected,
 the summary function will show the standard meta-analysis results.
 Otherwise, the summary function will show the subgroup meta-analysis results,
-with the significance test resutls for moderator effects, the splitting points of the moderators,
-and the estimated subgroup overall effect sizes.
+with the significance test results for moderator effects, the split points of the moderators,
+and the estimated subgroup summary effect sizes.
 }
