@@ -1,3 +1,9 @@
+Changes in metacart Version 2.0-1 (2019-05-09)
+========================================
+* Example of function FEmrt_main.R has been changed. Now the c parameter is set to 0.
+* Plot functions have been changed. They return a warning instead of an error in case the tree contains only the root node.
+* New maintainer.
+
 Changes in metacart Version 2.0-0 (2018-11-21)
 ========================================
 * New plot.FEmrt() function that produces the same plots as plot.REmrt().

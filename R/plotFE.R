@@ -12,6 +12,9 @@
 #' @import gridExtra
 #' @export
 plot.FEmrt <- function(x, ...){
+  if (length(x$n) < 2) {
+    warning("No tree was detected")
+  } else{
   # Extract necessary information from the FEmrt object
 
   frame <- x$tree$frame
@@ -265,7 +268,7 @@ plot.FEmrt <- function(x, ...){
 
 
   }
-
+  }
 
 }
 

@@ -40,7 +40,7 @@
 #' @return ci.ub: The upper bound of the confidence interval for the summary effect size
 #' @return call: The matched call
 #' @examples data(dat.BCT2009)
-#' FEtree <- FEmrt(g ~ T1 + T2+ T4 + T25, vi = vi, data = dat.BCT2009, c = 0.5)
+#' FEtree <- FEmrt(g ~ T1 + T2+ T4 + T25, vi = vi, data = dat.BCT2009, c = 0)
 #' print(FEtree)
 #' summary(FEtree)
 #' plot(FEtree)

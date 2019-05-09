@@ -11,7 +11,7 @@
 #' @import gridExtra
 #' @export
 plot.REmrt <- function(x, ...){
-  if (length(x$n) < 2) {stop("no tree was detected")}
+  if (length(x$n) < 2) {warning("no tree was detected")}
   else {
     # transparent theme of ggplot2
     transparent_theme <- ggplot2::theme(
