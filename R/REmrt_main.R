@@ -44,10 +44,12 @@
 #' @return ci.ub: The upper bound of the confidence interval for the summary effect size
 #' @return call: The matched call
 #' @examples data(dat.BCT2009)
+#' library(Rcpp)
 #' REtree <- REmrt(g ~ T1 + T2+ T4 +T25, vi = vi, data = dat.BCT2009, c = 0)
 #' summary(REtree)
 #' plot(REtree)
 #' @importFrom stats terms model.response pchisq pnorm qnorm
+#' @import Rcpp
 #' @seealso \code{\link{summary.REmrt}}, \code{\link{plot.REmrt}}
 #' @export
 

@@ -82,6 +82,7 @@ The tree growing process is equivalent to the approach described in Li et al. (2
 }
 \examples{
 data(dat.BCT2009)
+library(Rcpp)
 FEtree <- FEmrt(g ~ T1 + T2+ T4 + T25, vi = vi, data = dat.BCT2009, c = 0)
 print(FEtree)
 summary(FEtree)

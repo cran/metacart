@@ -40,6 +40,7 @@
 #' @return ci.ub: The upper bound of the confidence interval for the summary effect size
 #' @return call: The matched call
 #' @examples data(dat.BCT2009)
+#' library(Rcpp)
 #' FEtree <- FEmrt(g ~ T1 + T2+ T4 + T25, vi = vi, data = dat.BCT2009, c = 0)
 #' print(FEtree)
 #' summary(FEtree)
@@ -57,6 +58,7 @@
 #' @importFrom stats pchisq
 #' @importFrom stats pnorm
 #' @importFrom stats qnorm
+#' @import Rcpp
 #' @export
 FEmrt <- function(formula, data, vi, subset, c = 1,
                   control = rpart.control(xval = 10, minbucket = 3, minsplit = 6, cp = 0.0001),

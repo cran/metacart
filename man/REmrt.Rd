@@ -94,6 +94,7 @@ A function to fit a random effects meta-tree
 }
 \examples{
 data(dat.BCT2009)
+library(Rcpp)
 REtree <- REmrt(g ~ T1 + T2+ T4 +T25, vi = vi, data = dat.BCT2009, c = 0)
 summary(REtree)
 plot(REtree)

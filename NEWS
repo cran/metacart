@@ -1,3 +1,7 @@
+Changes in metacart Version 2.0-2 (2019-09-05)
+========================================
+* Rcpp is removed from Imports in DESCRIPTION
+
 Changes in metacart Version 2.0-1 (2019-05-09)
 ========================================
 * Example of function FEmrt_main.R has been changed. Now the c parameter is set to 0.
