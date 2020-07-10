@@ -4,8 +4,19 @@
 \alias{REmrt}
 \title{Random effects meta-tree}
 \usage{
-REmrt(formula, data, vi, c = 1, maxL = 5, minsplit = 6, cp = 1e-05,
-  minbucket = 3, xval = 10, lookahead = FALSE, ...)
+REmrt(
+  formula,
+  data,
+  vi,
+  c = 1,
+  maxL = 5,
+  minsplit = 6,
+  cp = 1e-05,
+  minbucket = 3,
+  xval = 10,
+  lookahead = FALSE,
+  ...
+)
 }
 \arguments{
 \item{formula}{A formula, with a response variable (usually the effect size) and the potential moderator variables but no interaction terms.}

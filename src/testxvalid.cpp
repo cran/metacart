@@ -24,12 +24,12 @@ using namespace Rcpp;
 //' @param tau2 the residual heterogeneity
 //' @keywords internal
 // [[Rcpp::export(".ComputeY")]]
-DataFrame ComputeY(DataFrame x1, NumericVector y,
+List ComputeY(DataFrame x1, NumericVector y,
                 NumericVector vi, NumericVector tau2) {
   int nsplit;
   int i;
   int j;
-  DataFrame res;
+  List res;
   for (nsplit = 0; nsplit < x1.ncol(); nsplit++) {
     IntegerVector Nodes = x1[nsplit];
     IntegerVector uniNodes = Rcpp::sort_unique(Nodes); 

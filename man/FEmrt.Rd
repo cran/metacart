@@ -4,8 +4,15 @@
 \alias{FEmrt}
 \title{Fixed effect meta-tree}
 \usage{
-FEmrt(formula, data, vi, subset, c = 1, control = rpart.control(xval =
-  10, minbucket = 3, minsplit = 6, cp = 1e-04), ...)
+FEmrt(
+  formula,
+  data,
+  vi,
+  subset,
+  c = 1,
+  control = rpart.control(xval = 10, minbucket = 3, minsplit = 6, cp = 1e-04),
+  ...
+)
 }
 \arguments{
 \item{formula}{A formula, with an outcome variable (usually the effect size) and the potential moderator variables but no interaction terms.}

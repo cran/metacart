@@ -55,7 +55,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // ComputeY
-DataFrame ComputeY(DataFrame x1, NumericVector y, NumericVector vi, NumericVector tau2);
+List ComputeY(DataFrame x1, NumericVector y, NumericVector vi, NumericVector tau2);
 RcppExport SEXP _metacart_ComputeY(SEXP x1SEXP, SEXP ySEXP, SEXP viSEXP, SEXP tau2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

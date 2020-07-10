@@ -1,3 +1,8 @@
+Changes in metacart Version 2.0-2 (2019-07-10)
+========================================
+* testxvalid.cpp is modified so that the function ComputeY returns a List instead of a DataFrame. 
+
+
 Changes in metacart Version 2.0-2 (2019-09-05)
 ========================================
 * Rcpp is removed from Imports in DESCRIPTION
