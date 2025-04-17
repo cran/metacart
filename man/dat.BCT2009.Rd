@@ -4,7 +4,8 @@
 \name{dat.BCT2009}
 \alias{dat.BCT2009}
 \title{A subset of data from Michie et al. (2009)}
-\format{A data frame of 106 interventions with five motivation-enhancing behavior change techniques (BCTs).
+\format{
+A data frame of 106 interventions with five motivation-enhancing behavior change techniques (BCTs).
 \itemize{
   \item study: The name of the intervention.
   \item g: The effect size of each intervention.
@@ -26,7 +27,8 @@
   and "0" for not used.
 
 
-  }}
+  }
+}
 \usage{
 data(dat.BCT2009)
 }
@@ -36,7 +38,7 @@ In this subset of the data, the interventions that include at least one
 of the motivation-enhancing behaviour change techniques (BCTs) were selected (N = 106).
 }
 \details{
-IMPORTANT: for questions about these data contact Xinru Li: x.li@math.leidenuniv.nl.
+IMPORTANT: for questions about these data contact Juan Claramunt: j.claramunt.gonzalez@fsw.leidenuniv.nl.
 }
 \references{
 If you use these data, please refer to: Michie, S., Abraham, C., Whittington, C., McAteer, J., & Gupta, S. (2009). Effective techniques in healthy eating and physical activity interventions: a meta-regression. \emph{Health Psychology, 28(6)}, 690.

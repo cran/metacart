@@ -11,6 +11,9 @@
 
 \item{...}{Additional arguments to pass.}
 }
+\value{
+A plot visualizing an RE meta-tree
+}
 \description{
 Plot function for a \code{REmrt} object. The plot shows the result of \code{REmrt}.
 The plot function uses the plot method from the package \pkg{ggplot2}

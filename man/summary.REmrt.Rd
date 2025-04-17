@@ -13,6 +13,9 @@
 
 \item{\dots}{additional arguments to be passed.}
 }
+\value{
+Summary of a RE meta-tree
+}
 \description{
 Summary of the results of a RE meta-tree object
 }

@@ -11,6 +11,9 @@
 
 \item{\dots}{additional arguments to be passed.}
 }
+\value{
+Printed output of a RE meta-tree
+}
 \description{
 Print the results of a REmrt object
 }

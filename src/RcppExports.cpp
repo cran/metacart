@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // compute_tau_
 NumericVector compute_tau_(NumericVector x1, NumericVector x2, NumericVector x3, NumericVector xuni, NumericVector x4, NumericVector x5);
 RcppExport SEXP _metacart_compute_tau_(SEXP x1SEXP, SEXP x2SEXP, SEXP x3SEXP, SEXP xuniSEXP, SEXP x4SEXP, SEXP x5SEXP) {
@@ -18,6 +23,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type x4(x4SEXP);
     Rcpp::traits::input_parameter< NumericVector >::type x5(x5SEXP);
     rcpp_result_gen = Rcpp::wrap(compute_tau_(x1, x2, x3, xuni, x4, x5));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_left_
+NumericVector compute_left_(NumericVector x1, NumericVector x2, NumericVector x3, NumericVector xuni);
+RcppExport SEXP _metacart_compute_left_(SEXP x1SEXP, SEXP x2SEXP, SEXP x3SEXP, SEXP xuniSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x1(x1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x2(x2SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x3(x3SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type xuni(xuniSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_left_(x1, x2, x3, xuni));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -38,6 +57,54 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// complexity_decrease_
+NumericVector complexity_decrease_(int inNode, NumericVector delQ, IntegerVector pnode);
+RcppExport SEXP _metacart_complexity_decrease_(SEXP inNodeSEXP, SEXP delQSEXP, SEXP pnodeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type inNode(inNodeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type delQ(delQSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type pnode(pnodeSEXP);
+    rcpp_result_gen = Rcpp::wrap(complexity_decrease_(inNode, delQ, pnode));
+    return rcpp_result_gen;
+END_RCPP
+}
+// find_offsprings_
+IntegerVector find_offsprings_(int nodeID, IntegerVector allNodes);
+RcppExport SEXP _metacart_find_offsprings_(SEXP nodeIDSEXP, SEXP allNodesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type nodeID(nodeIDSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type allNodes(allNodesSEXP);
+    rcpp_result_gen = Rcpp::wrap(find_offsprings_(nodeID, allNodes));
+    return rcpp_result_gen;
+END_RCPP
+}
+// find_children_vec
+IntegerVector find_children_vec(IntegerVector nodeIDv, IntegerVector allNodes);
+RcppExport SEXP _metacart_find_children_vec(SEXP nodeIDvSEXP, SEXP allNodesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type nodeIDv(nodeIDvSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type allNodes(allNodesSEXP);
+    rcpp_result_gen = Rcpp::wrap(find_children_vec(nodeIDv, allNodes));
+    return rcpp_result_gen;
+END_RCPP
+}
+// find_ancestor_
+IntegerVector find_ancestor_(int nodeID);
+RcppExport SEXP _metacart_find_ancestor_(SEXP nodeIDSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type nodeID(nodeIDSEXP);
+    rcpp_result_gen = Rcpp::wrap(find_ancestor_(nodeID));
+    return rcpp_result_gen;
+END_RCPP
+}
 // partition
 IntegerMatrix partition(DataFrame x1, DataFrame x2, LogicalVector x3, IntegerVector x4, List x5, DataFrame x6);
 RcppExport SEXP _metacart_partition(SEXP x1SEXP, SEXP x2SEXP, SEXP x3SEXP, SEXP x4SEXP, SEXP x5SEXP, SEXP x6SEXP) {
@@ -51,6 +118,16 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< List >::type x5(x5SEXP);
     Rcpp::traits::input_parameter< DataFrame >::type x6(x6SEXP);
     rcpp_result_gen = Rcpp::wrap(partition(x1, x2, x3, x4, x5, x6));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcpp_hello_world
+List rcpp_hello_world();
+RcppExport SEXP _metacart_rcpp_hello_world() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(rcpp_hello_world());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -98,8 +175,14 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_metacart_compute_tau_", (DL_FUNC) &_metacart_compute_tau_, 6},
+    {"_metacart_compute_left_", (DL_FUNC) &_metacart_compute_left_, 4},
     {"_metacart_compute_re_Q_", (DL_FUNC) &_metacart_compute_re_Q_, 7},
+    {"_metacart_complexity_decrease_", (DL_FUNC) &_metacart_complexity_decrease_, 3},
+    {"_metacart_find_offsprings_", (DL_FUNC) &_metacart_find_offsprings_, 2},
+    {"_metacart_find_children_vec", (DL_FUNC) &_metacart_find_children_vec, 2},
+    {"_metacart_find_ancestor_", (DL_FUNC) &_metacart_find_ancestor_, 1},
     {"_metacart_partition", (DL_FUNC) &_metacart_partition, 6},
+    {"_metacart_rcpp_hello_world", (DL_FUNC) &_metacart_rcpp_hello_world, 0},
     {"_metacart_ComputeY", (DL_FUNC) &_metacart_ComputeY, 4},
     {"_metacart_PredY", (DL_FUNC) &_metacart_PredY, 2},
     {"_metacart_ReplaceNA", (DL_FUNC) &_metacart_ReplaceNA, 5},

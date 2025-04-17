@@ -12,13 +12,7 @@
 #'partitions the studies into more homogeneous subgroups, and estimates summary effect size in each subgroup.
 #'The fixed effect or random effects assumption can be consistently taken into account in both tree-growing process and subgroup analysis.
 #'
-#' @details \tabular{ll}{
-#'   Package: \tab metacart\cr
-#'   Type: \tab Package\cr
-#'   Version: \tab 2.0-0\cr
-#'   Date: \tab 2018-11-12\cr
-#'   License: \tab GPL\cr
-#' }
+#' @details 
 #'
 #'   This method is suitable for identifying interaction effects between dichotomous,
 #'   ordinal, continuous, and nominal moderators.
@@ -30,17 +24,18 @@
 #'
 #'   The core functions of the package are \code{\link{FEmrt}} and  \code{\link{REmrt}}.
 #'
-#' @author Maintainer: Xinru Li <x.li@math.leidenuniv.nl>; Contributors: Elise Dusseldorp, Kaihua Liu (supported with the plot function), Jacqueline Meulman.
+#' @author Maintainer: Xinru Li <x.li@math.leidenuniv.nl>; Contributors: Elise Dusseldorp, Kaihua Liu (supported with the plot function), Juan Claramunt Gonzalez, and Jacqueline Meulman.
 #' @references Dusseldorp, E., van Genugten, L., van Buuren, S., Verheijden, M. W., & van Empelen, P. (2014). Combinations of techniques that effectively change health behavior: Evidence from meta-cart analysis.  \emph{Health Psychology, 33(12)}, 1530-1540. doi:
 #'      10.1037/hea0000018.
 #' @references Li, X., Dusseldorp, E., & Meulman, J. J. (2017). Meta-CART: A tool to identify interactions between moderators in meta-analysis. \emph{British Journal of Mathematical and Statistical Psychology, 70(1)}, 118-136. doi: 10.1111/bmsp.12088.
+#' 
+#' @references Li, X., Dusseldorp, E., Claramunt Gonzalez, J., Su, X., van Megen, J., & Meulman, J. J. (2025). Enhanced tree-based subgroup identification in meta-analysis. \emph{To be published}.
 #'
 #' @references Therneau, T., Atkinson, B., & Ripley, B. (2014) rpart: Recursive partitioning and regression trees. R package version, 4-1.
-#' @references The articles of our own work can be found at \url{http://www.elisedusseldorp.nl/}
+#' @references The articles of our own work can be found at \url{https://elisedusseldorp.nl/}
 #' @keywords package
 #' @seealso \code{\link{FEmrt}}, \code{\link{REmrt}}, \code{\link{summary.FEmrt}},\code{\link{summary.REmrt}},
 #'   \code{\link{plot.FEmrt}},\code{\link{plot.REmrt}},\code{\link{predict.FEmrt}},\code{\link{predict.REmrt}}
 #'
-#' @docType package
 #' @name metacart-package
-NULL
+"_PACKAGE"

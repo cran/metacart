@@ -8,13 +8,19 @@ REmrt(
   formula,
   data,
   vi,
-  c = 1,
+  c.pruning = 1,
   maxL = 5,
   minsplit = 6,
   cp = 1e-05,
   minbucket = 3,
   xval = 10,
   lookahead = FALSE,
+  sss = FALSE,
+  alpha.endcut = 0.02,
+  a = 50,
+  multi.start = TRUE,
+  n.starts = 3,
+  perm = NULL,
   ...
 )
 }
@@ -25,7 +31,7 @@ REmrt(
 
 \item{vi}{sampling variance of the effect size.}
 
-\item{c}{A non-negative scalar.The pruning parameter to prune the initial tree by the "c*standard-error" rule.}
+\item{c.pruning}{A non-negative scalar.The pruning parameter to prune the initial tree by the "c*standard-error" rule.}
 
 \item{maxL}{the maximum number of splits}
 
@@ -38,6 +44,18 @@ REmrt(
 \item{xval}{the number of folds to perform the cross-validation}
 
 \item{lookahead}{an argument indicating whether to apply the "look-ahead" strategy when fitting the tree}
+
+\item{sss}{boolean parameter indicating whether the SSS algorithm must be used.}
+
+\item{alpha.endcut}{parameter used in the splitting algorithm to avoid the endcut preference problem.}
+
+\item{a}{parameter used in the sss to determine the slope of the logistic function that replaces the indicator function.}
+
+\item{multi.start}{boolean indicating whether multiple starts must be used}
+
+\item{n.starts}{number of multiple starts}
+
+\item{perm}{the number of permuted data sets, if NULL then no permutation test is performed}
 
 \item{...}{Additional arguments to be passed.}
 }
@@ -72,7 +90,7 @@ ci.ub: The upper bound of the confidence interval
 
 call: The matched call
 
-cv.res: The cross-validation table
+cptable: The cross-validation table
 
 data: the data set subgrouped by the fitted tree
 
@@ -98,17 +116,28 @@ ci.lb: The lower bound of the confidence interval for the summary effect size
 
 ci.ub: The upper bound of the confidence interval for the summary effect size
 
+formula: The formula provided as input.
+
 call: The matched call
+
+initial.tree: The initial tree obtained before pruning.
 }
 \description{
 A function to fit a random effects meta-tree
 }
 \examples{
+#set.seed is required to obtain the same tree 
+#due to the use of a probabilistic algorithm for pruning
+set.seed(12345) 
 data(dat.BCT2009)
 library(Rcpp)
-REtree <- REmrt(g ~ T1 + T2+ T4 +T25, vi = vi, data = dat.BCT2009, c = 0)
+REtree <- REmrt(g ~ T1 + T2+ T4 +T25, vi = vi, data = dat.BCT2009, c.pruning = 0)
 summary(REtree)
 plot(REtree)
+
+#You can obtain the non-pruned tree by calling the initial.tree output argument
+REtree$initial.tree
+
 }
 \seealso{
 \code{\link{summary.REmrt}}, \code{\link{plot.REmrt}}

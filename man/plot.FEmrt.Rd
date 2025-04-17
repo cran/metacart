@@ -11,6 +11,9 @@
 
 \item{...}{additional arguments to pass}
 }
+\value{
+A plot visualizing an FE meta-tree
+}
 \description{
 Plot function for a \code{FEmrt} object. The plot shows the result of \code{FEmrt}.
 The plot function uses the plot method from the package \pkg{ggplot2}

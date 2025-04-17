@@ -8,13 +8,11 @@
 #' @method plot FEmrt
 #' @param x A FEmrt object.
 #' @param ... additional arguments to pass
+#' @return A plot visualizing an FE meta-tree
 #' @import ggplot2
 #' @import gridExtra
 #' @export
 plot.FEmrt <- function(x, ...){
-  if (length(x$n) < 2) {
-    warning("No tree was detected")
-  } else{
   # Extract necessary information from the FEmrt object
 
   frame <- x$tree$frame
@@ -32,7 +30,16 @@ plot.FEmrt <- function(x, ...){
   pleaves <- rownames(frame0)[inx.pleaves]
   # order the splits by the first child leaf of the parent leaves
   pleaves <- pleaves[order(as.numeric(rownames(frame0)[inx.pleaves+1]))]
+  
   splits.all <- labels(x$tree, minlength = 0L)
+  #Rounding change:
+  
+  rows<-grep("<", splits.all)
+  for (i in rows) {
+    splits.all[i]<-paste0(substr(splits.all[i], 1, unlist(gregexpr('<', splits.all[i]))), " " ,round(as.numeric(substr(splits.all[i], unlist(gregexpr('<', splits.all[i]))+1, nchar(splits.all[i]))),2))
+  }
+  
+  
   splits <- splits.all[inx.pleaves+1][order(as.numeric(rownames(frame0)[inx.pleaves+1]))]
   ntree <- data.frame(split = as.character(splits), pleaf = as.numeric(pleaves))
   # create an ojbect with all plotting information
@@ -179,7 +186,7 @@ plot.FEmrt <- function(x, ...){
     config.split_text_size = 3
     config.split_label = T
 
-    # TODO: customize the leaf text
+    
     for (i in 1:nrow(nodes)) {
       node <- nodes[i, ]
       parent = nodes[nodes$leaf == node$pleaf,]
@@ -193,7 +200,7 @@ plot.FEmrt <- function(x, ...){
         )
 
       # The height difference between two levels is used as a baseline
-      # TODO: customizable
+      
       h = 1
 
       # Add split conditions in case it's a splitting node
@@ -268,7 +275,7 @@ plot.FEmrt <- function(x, ...){
 
 
   }
-  }
+
 
 }
 

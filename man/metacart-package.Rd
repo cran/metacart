@@ -2,6 +2,7 @@
 % Please edit documentation in R/metacart-package.R
 \docType{package}
 \name{metacart-package}
+\alias{metacart}
 \alias{metacart-package}
 \title{R package for meta-CART}
 \description{
@@ -18,15 +19,7 @@ partitions the studies into more homogeneous subgroups, and estimates summary ef
 The fixed effect or random effects assumption can be consistently taken into account in both tree-growing process and subgroup analysis.
 }
 \details{
-\tabular{ll}{
-  Package: \tab metacart\cr
-  Type: \tab Package\cr
-  Version: \tab 2.0-0\cr
-  Date: \tab 2018-11-12\cr
-  License: \tab GPL\cr
-}
-
-  This method is suitable for identifying interaction effects between dichotomous,
+This method is suitable for identifying interaction effects between dichotomous,
   ordinal, continuous, and nominal moderators.
   The output of a \code{REmrt} object shows meta-CART analysis results based on the random effects model.
   And the output of a \code{FEmrt} object shows meta-CART analysis results based on the fixed effect model.
@@ -42,15 +35,17 @@ Dusseldorp, E., van Genugten, L., van Buuren, S., Verheijden, M. W., & van Empel
 
 Li, X., Dusseldorp, E., & Meulman, J. J. (2017). Meta-CART: A tool to identify interactions between moderators in meta-analysis. \emph{British Journal of Mathematical and Statistical Psychology, 70(1)}, 118-136. doi: 10.1111/bmsp.12088.
 
+Li, X., Dusseldorp, E., Claramunt Gonzalez, J., Su, X., van Megen, J., & Meulman, J. J. (2025). Enhanced tree-based subgroup identification in meta-analysis. \emph{To be published}.
+
 Therneau, T., Atkinson, B., & Ripley, B. (2014) rpart: Recursive partitioning and regression trees. R package version, 4-1.
 
-The articles of our own work can be found at \url{http://www.elisedusseldorp.nl/}
+The articles of our own work can be found at \url{https://elisedusseldorp.nl/}
 }
 \seealso{
 \code{\link{FEmrt}}, \code{\link{REmrt}}, \code{\link{summary.FEmrt}},\code{\link{summary.REmrt}},
   \code{\link{plot.FEmrt}},\code{\link{plot.REmrt}},\code{\link{predict.FEmrt}},\code{\link{predict.REmrt}}
 }
 \author{
-Maintainer: Xinru Li <x.li@math.leidenuniv.nl>; Contributors: Elise Dusseldorp, Kaihua Liu (supported with the plot function), Jacqueline Meulman.
+Maintainer: Xinru Li <x.li@math.leidenuniv.nl>; Contributors: Elise Dusseldorp, Kaihua Liu (supported with the plot function), Juan Claramunt Gonzalez, and Jacqueline Meulman.
 }
 \keyword{package}

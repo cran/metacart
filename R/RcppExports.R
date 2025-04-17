@@ -14,6 +14,10 @@
     .Call('_metacart_compute_tau_', PACKAGE = 'metacart', x1, x2, x3, xuni, x4, x5)
 }
 
+compute_left_ <- function(x1, x2, x3, xuni) {
+    .Call('_metacart_compute_left_', PACKAGE = 'metacart', x1, x2, x3, xuni)
+}
+
 #' Compute re Q for different values of tau2
 #' 
 #' @param x1 the effect size g in the unsplit leaves
@@ -28,6 +32,22 @@
     .Call('_metacart_compute_re_Q_', PACKAGE = 'metacart', x1, x2, x3, x4, xuni, x5, x6)
 }
 
+complexity_decrease_ <- function(inNode, delQ, pnode) {
+    .Call('_metacart_complexity_decrease_', PACKAGE = 'metacart', inNode, delQ, pnode)
+}
+
+find_offsprings_ <- function(nodeID, allNodes) {
+    .Call('_metacart_find_offsprings_', PACKAGE = 'metacart', nodeID, allNodes)
+}
+
+find_children_vec <- function(nodeIDv, allNodes) {
+    .Call('_metacart_find_children_vec', PACKAGE = 'metacart', nodeIDv, allNodes)
+}
+
+find_ancestor_ <- function(nodeID) {
+    .Call('_metacart_find_ancestor_', PACKAGE = 'metacart', nodeID)
+}
+
 #' Partition the test set based on a trained tree
 #' 
 #' @param x1 the tree component of the REmrt object
@@ -39,6 +59,10 @@
 #' @keywords internal
 .partition <- function(x1, x2, x3, x4, x5, x6) {
     .Call('_metacart_partition', PACKAGE = 'metacart', x1, x2, x3, x4, x5, x6)
+}
+
+rcpp_hello_world <- function() {
+    .Call('_metacart_rcpp_hello_world', PACKAGE = 'metacart')
 }
 
 #' Compute the subgroup effect sizes

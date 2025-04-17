@@ -2,19 +2,19 @@
 % Please edit documentation in R/predict.R
 \name{predict.REmrt}
 \alias{predict.REmrt}
-\title{Predictions from a fitted metacart object}
+\title{Predictions from a fitted RE metacart object}
 \usage{
 \method{predict}{REmrt}(object, newdata, ...)
 }
 \arguments{
 \item{object}{fitted model object of class "REmrt".}
 
-\item{newdata}{data frame containing the values at which predictions are required.}
+\item{newdata}{data frame containing the values for which predictions are required.}
 
 \item{...}{Arguments that pass to other methods.}
 }
 \value{
-A data frame containing the predicted effect size, the moderators, and the corresponding node lables in the fitted tree.
+A data frame containing the predicted effect size, the moderators, and the corresponding node labels in the fitted tree.
 }
 \description{
 Returns a data frame of predicted effect sizes and moderators from a fitted metacart object

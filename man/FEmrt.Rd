@@ -9,8 +9,19 @@ FEmrt(
   data,
   vi,
   subset,
-  c = 1,
-  control = rpart.control(xval = 10, minbucket = 3, minsplit = 6, cp = 1e-04),
+  c.pruning = 0.5,
+  perm = NULL,
+  sss = FALSE,
+  lookahead = FALSE,
+  cp = 1e-04,
+  maxdepth = 10L,
+  minsplit = 6,
+  xval = 10,
+  minbucket = 3,
+  a = 50,
+  alpha.endcut = 0.02,
+  multi.start = T,
+  n.starts = 3,
   ...
 )
 }
@@ -23,9 +34,31 @@ FEmrt(
 
 \item{subset}{optional expression that selects only a subset of the rows of the data.}
 
-\item{c}{A non-negative scalar.The pruning parameter to prune the initial tree by the "c*standard-error" rule.}
+\item{c.pruning}{A non-negative scalar.The pruning parameter to prune the initial tree by the "c*standard-error" rule.}
 
-\item{control}{the control object (similar to rpart.control from the rpart package) that is used in the tree algorithm}
+\item{perm}{the number of data sets to permute for the permutation test. If set as NULL, then perumuation test will not be performed}
+
+\item{sss}{boolean indicating whether the SSS strategy is used or not.}
+
+\item{lookahead}{a boolean argument indicating whether to apply the "look-ahead" strategy when fitting the tree}
+
+\item{cp}{complexity parameter as in rpart.}
+
+\item{maxdepth}{set the maximum depth of any node of the final tree, with the root node counted as depth 0}
+
+\item{minsplit}{the minimum number of observations that must exist in a node in order for a split to be attempted.}
+
+\item{xval}{number of cross-validations.}
+
+\item{minbucket}{the minimum number of observations in any terminal <leaf> node.}
+
+\item{a}{parameter used in the sss to determine the slope of the logistic function that replaces the indicator function.}
+
+\item{alpha.endcut}{parameter used in the splitting algorithm to avoid the endcut preference problem.}
+
+\item{multi.start}{boolean indicating whether multiple starts must be used}
+
+\item{n.starts}{number of multiple starts}
 
 \item{...}{Additional arguments passed to the tree growing algorithm based on \pkg{rpart}.}
 }
@@ -80,6 +113,8 @@ ci.lb: The lower bound of the confidence interval for the summary effect size
 
 ci.ub: The upper bound of the confidence interval for the summary effect size
 
+formula: The formula provided as input.
+
 call: The matched call
 }
 \description{
@@ -90,10 +125,10 @@ The tree growing process is equivalent to the approach described in Li et al. (2
 \examples{
 data(dat.BCT2009)
 library(Rcpp)
-FEtree <- FEmrt(g ~ T1 + T2+ T4 + T25, vi = vi, data = dat.BCT2009, c = 0)
+FEtree <- FEmrt(g ~ T1 + T2+ T4 + T25, vi = vi, data = dat.BCT2009, c.pruning = 0.5)
 print(FEtree)
 summary(FEtree)
-plot(FEtree)
+#plot(FEtree)
 }
 \references{
 Dusseldorp, E., van Genugten, L., van Buuren, S., Verheijden, M. W., & van Empelen, P. (2014). Combinations of techniques that effectively change health behavior: Evidence from meta-cart analysis.  \emph{Health Psychology, 33(12)}, 1530-1540. doi:
@@ -104,5 +139,5 @@ Li, X., Dusseldorp, E., & Meulman, J. J. (2017). Meta-CART: A tool to identify i
 Therneau, T., Atkinson, B., & Ripley, B. (2014) rpart: Recursive partitioning and regression trees. R package version, 4-1.
 }
 \seealso{
-\code{\link{summary.FEmrt}}, \code{\link{plot.FEmrt}}, \code{\link{rpart}},\code{\link{rpart.control}}
+\code{\link{summary.FEmrt}}, \code{\link{plot.FEmrt}}, \code{\link[rpart]{rpart}},\code{\link[rpart]{rpart.control}}
 }

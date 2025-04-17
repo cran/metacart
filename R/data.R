@@ -6,7 +6,7 @@
 #'
 #' @name  dat.BCT2009
 #' @docType data
-#' @details IMPORTANT: for questions about these data contact Xinru Li: x.li@math.leidenuniv.nl.
+#' @details IMPORTANT: for questions about these data contact Juan Claramunt: j.claramunt.gonzalez@fsw.leidenuniv.nl.
 #' @references If you use these data, please refer to: Michie, S., Abraham, C., Whittington, C., McAteer, J., & Gupta, S. (2009). Effective techniques in healthy eating and physical activity interventions: a meta-regression. \emph{Health Psychology, 28(6)}, 690.
 #'
 #' @references An application of (a preliminary version of) meta-CART to this data set is given in: Dusseldorp, E., Van Genugten, L., van Buuren, S., Verheijden, M. W., & van Empelen, P. (2014). Combinations of techniques that effectively change health behavior: Evidence from Meta-CART analysis. \emph{Health Psychology, 33(12)}, 1530.

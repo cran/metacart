@@ -4,13 +4,15 @@
 \name{dat.balanced}
 \alias{dat.balanced}
 \title{A simulated meta-analytic data set with balanced pure interaction effects}
-\format{A data frame of 60 studies with 4 moderators
+\format{
+A data frame of 60 studies with 4 moderators
 \itemize{
   \item efk: The effect size of each study expressed as Hedges' g
   \item vark: The sampling variance of the effect size
   \item x1 to x4: Four randomly generated moderators. x1, x2, and x4 are dichotomous variables,
   x3 is a continuous variable generated from uniform distribution.
-  }}
+  }
+}
 \usage{
 data(dat.balanced)
 }
